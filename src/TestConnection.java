@@ -9,7 +9,7 @@ public class TestConnection {
         try {
             Connection con = DBConnection.getConnection();
             if (con != null) {
-                System.out.println("Connected successfully to NewSalesDB!");
+                System.out.println("Connected successfully to Sales!");
             }
             
             Statement stmt = con.createStatement();

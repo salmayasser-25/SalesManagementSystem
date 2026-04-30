@@ -11,7 +11,7 @@ public class ProductDAO {
 
     // ── CREATE ────────────────────────────────────────────────────────────────
     public boolean addProduct(Product product) {
-        String sql = "INSERT INTO products (name, price, quantity) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO products (productname, price, quantity, ProductDescription) VALUES (?, ?, ?, 'N/A')";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, product.getName());
@@ -26,7 +26,7 @@ public class ProductDAO {
 
     // ── READ (single) ─────────────────────────────────────────────────────────
     public Product getProductById(int id) {
-        String sql = "SELECT * FROM products WHERE productId = ?";
+        String sql = "SELECT * FROM products WHERE productid = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
@@ -43,7 +43,7 @@ public class ProductDAO {
     // ── READ (all) ────────────────────────────────────────────────────────────
     public List<Product> getAllProducts() {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT * FROM products ORDER BY productId";
+        String sql = "SELECT * FROM products ORDER BY productid";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
@@ -75,7 +75,7 @@ public class ProductDAO {
 
     // ── DELETE ────────────────────────────────────────────────────────────────
     public boolean deleteProduct(int id) {
-        String sql = "DELETE FROM products WHERE productId = ?";
+        String sql = "DELETE FROM products WHERE productid = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
@@ -89,8 +89,8 @@ public class ProductDAO {
     // ── Helper ────────────────────────────────────────────────────────────────
     private Product mapRow(ResultSet rs) throws SQLException {
         Product p = new Product();
-        p.setProductId(rs.getInt("productId"));
-        p.setName(rs.getString("name"));
+        p.setProductId(rs.getInt("productid"));
+        p.setName(rs.getString("productname"));
         p.setPrice(rs.getDouble("price"));
         p.setQuantity(rs.getInt("quantity"));
         return p;

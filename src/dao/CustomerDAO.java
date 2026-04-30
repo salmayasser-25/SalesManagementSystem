@@ -11,7 +11,7 @@ public class CustomerDAO {
 
     // ── CREATE ────────────────────────────────────────────────────────────────
     public boolean addCustomer(Customer customer) {
-        String sql = "INSERT INTO customers (name, phone, email, address) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO customers (CustomerName, Phone, Email, CsutAddress) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, customer.getName());
@@ -27,7 +27,7 @@ public class CustomerDAO {
 
     // ── READ (single) ─────────────────────────────────────────────────────────
     public Customer getCustomerById(int id) {
-        String sql = "SELECT * FROM customers WHERE customerId = ?";
+        String sql = "SELECT * FROM customers WHERE CustomerId = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
@@ -44,7 +44,7 @@ public class CustomerDAO {
     // ── READ (all) ────────────────────────────────────────────────────────────
     public List<Customer> getAllCustomers() {
         List<Customer> list = new ArrayList<>();
-        String sql = "SELECT * FROM customers ORDER BY customerId";
+        String sql = "SELECT * FROM customers ORDER BY CustomerId";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
@@ -77,7 +77,7 @@ public class CustomerDAO {
 
     // ── DELETE ────────────────────────────────────────────────────────────────
     public boolean deleteCustomer(int id) {
-        String sql = "DELETE FROM customers WHERE customerId = ?";
+        String sql = "DELETE FROM customers WHERE CustomerId = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
@@ -91,11 +91,11 @@ public class CustomerDAO {
     // ── Helper ────────────────────────────────────────────────────────────────
     private Customer mapRow(ResultSet rs) throws SQLException {
         Customer c = new Customer();
-        c.setCustomerId(rs.getInt("customerId"));
-        c.setName(rs.getString("name"));
-        c.setPhone(rs.getString("phone"));
-        c.setEmail(rs.getString("email"));
-        c.setAddress(rs.getString("address"));
+        c.setCustomerId(rs.getInt("CustomerId"));
+        c.setName(rs.getString("CustomerName"));
+        c.setPhone(rs.getString("Phone"));
+        c.setEmail(rs.getString("Email"));
+        c.setAddress(rs.getString("CsutAddress"));
         return c;
     }
 }
