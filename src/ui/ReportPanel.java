@@ -9,6 +9,8 @@ import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JOptionPane;
+import java.awt.Window;
+import javax.swing.SwingUtilities;
 /**
  *
  * @author ssalm
@@ -152,6 +154,7 @@ public class ReportPanel extends javax.swing.JPanel {
         lblLowest = new javax.swing.JLabel();
         btnAverage = new javax.swing.JButton();
         lblAverage = new javax.swing.JLabel();
+        btnBackToMenu = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("Sales Reports");
@@ -284,6 +287,13 @@ public class ReportPanel extends javax.swing.JPanel {
 
         lblAverage.setText("0.00");
 
+        btnBackToMenu.setText("Back to Menu");
+        btnBackToMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackToMenuActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -308,6 +318,9 @@ public class ReportPanel extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addComponent(lblAverage)
                         .addGap(72, 72, 72))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnBackToMenu))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -322,7 +335,8 @@ public class ReportPanel extends javax.swing.JPanel {
                     .addComponent(lblHighest)
                     .addComponent(lblLowest)
                     .addComponent(lblAverage))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(btnBackToMenu))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -424,10 +438,18 @@ public class ReportPanel extends javax.swing.JPanel {
         JOptionPane.showMessageDialog(this, "Highest Sale: $" + lblHighest.getText());
 
     }//GEN-LAST:event_btnHighestActionPerformed
+
+    private void btnBackToMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackToMenuActionPerformed
+        // TODO add your handling code here:
+        Window window = SwingUtilities.getWindowAncestor(this);
+        new MainFrame().setVisible(true);
+        window.dispose();
+    }//GEN-LAST:event_btnBackToMenuActionPerformed
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAverage;
+    private javax.swing.JButton btnBackToMenu;
     private javax.swing.JButton btnHighest;
     private javax.swing.JButton btnLowest;
     private javax.swing.JButton btnRefresh;

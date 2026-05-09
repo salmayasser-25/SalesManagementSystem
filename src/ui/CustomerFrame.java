@@ -233,26 +233,38 @@ public class CustomerFrame extends JPanel {
     // =========================================================================
     // Button bar
     // =========================================================================
-    private JPanel buildButtonBar() {
-        JPanel bar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 12));
-        bar.setBackground(C_BG);
-        bar.setBorder(new MatteBorder(1, 0, 0, 0, C_BORDER));
+   private JPanel buildButtonBar() {
+    JPanel bar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 12));
+    bar.setBackground(C_BG);
+    bar.setBorder(new MatteBorder(1, 0, 0, 0, C_BORDER));
 
-        btnRefresh = makeBtn("↻  Refresh", C_FIELD_BG, C_LABEL);
-        btnClear   = makeBtn("Clear",      C_FIELD_BG, C_LABEL);
-        btnDelete  = makeBtn("Delete",     C_BTN_DEL,  C_BTN_FG);
-        btnUpdate  = makeBtn("Update",     C_BTN_UPD,  C_BTN_FG);
-        btnAdd     = makeBtn("Add New",    C_BTN_ADD,  C_BTN_FG);
-        btnAdd.setFont(new Font("Segoe UI", Font.BOLD, 13));
+    btnRefresh = makeBtn("↻  Refresh", C_FIELD_BG, C_LABEL);
+    btnClear   = makeBtn("Clear",      C_FIELD_BG, C_LABEL);
+    btnDelete  = makeBtn("Delete",     C_BTN_DEL,  C_BTN_FG);
+    btnUpdate  = makeBtn("Update",     C_BTN_UPD,  C_BTN_FG);
+    btnAdd     = makeBtn("Add New",    C_BTN_ADD,  C_BTN_FG);
+    
+    // ← ضيفي الزر الجديد ده
+    JButton btnBack = makeBtn("← Back to Menu", C_BTN_ADD, C_BTN_FG);
+    btnBack.addActionListener(e -> {
+        Window window = SwingUtilities.getWindowAncestor(this);
+        new MainFrame().setVisible(true);
+        window.dispose();
+    });
+    
+    btnAdd.setFont(new Font("Segoe UI", Font.BOLD, 13));
 
-        bar.add(btnRefresh);
-        bar.add(btnClear);
-        bar.add(Box.createHorizontalStrut(10));
-        bar.add(btnDelete);
-        bar.add(btnUpdate);
-        bar.add(btnAdd);
-        return bar;
-    }
+    bar.add(btnRefresh);
+    bar.add(btnClear);
+    bar.add(Box.createHorizontalStrut(10));
+    bar.add(btnDelete);
+    bar.add(btnUpdate);
+    bar.add(btnAdd);
+    bar.add(Box.createHorizontalStrut(20));  // مسافة
+    bar.add(btnBack);  // إضافة الزر
+    
+    return bar;
+}
 
     private JButton makeBtn(String text, Color bg, Color fg) {
         JButton btn = new JButton(text);
