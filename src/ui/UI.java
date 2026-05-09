@@ -12,6 +12,11 @@ import models.Product;
 import models.Sale;
 import java.util.List;
 
+import dao.UserDAO;
+import models.User;
+import models.UserSession;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Ali
@@ -36,6 +41,8 @@ public class UI extends javax.swing.JPanel {
             jTabbedPane1.setTitleAt(4, "Report");
         }
         
+         // Apply access control
+         applyAccessControl();
         loadCustomers();
         loadProducts();
         loadSales();
@@ -58,16 +65,18 @@ public class UI extends javax.swing.JPanel {
         FristNameTEXT = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         LastNameTEXT = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        AgeTEXT = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         PhoneTEXT = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         AdderssTEXT = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        maleRadioButton = new javax.swing.JRadioButton();
-        femaleRadioButton = new javax.swing.JRadioButton();
         Registeration = new javax.swing.JButton();
+        btnBackToLogin = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        txtEmail = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txtPassword = new javax.swing.JPasswordField();
+        jLabel8 = new javax.swing.JLabel();
+        txtConfirmPassword = new javax.swing.JPasswordField();
         tabCustomer = new javax.swing.JPanel();
         lblCustName = new javax.swing.JLabel();
         txtCustName = new javax.swing.JTextField();
@@ -82,6 +91,8 @@ public class UI extends javax.swing.JPanel {
         btnCustDelete = new javax.swing.JButton();
         jScrollPaneCustomers = new javax.swing.JScrollPane();
         tblCustomers = new javax.swing.JTable();
+        btnLogout = new javax.swing.JButton();
+        btnFinish = new javax.swing.JButton();
         tabProduct = new javax.swing.JPanel();
         lblProdName = new javax.swing.JLabel();
         txtProdName = new javax.swing.JTextField();
@@ -94,12 +105,27 @@ public class UI extends javax.swing.JPanel {
         btnProdDelete = new javax.swing.JButton();
         jScrollPaneProducts = new javax.swing.JScrollPane();
         tblProducts = new javax.swing.JTable();
+        btnLogoutProduct = new javax.swing.JButton();
+        btnFinishProduct = new javax.swing.JButton();
         tabReport = new javax.swing.JPanel();
         btnReportRefresh = new javax.swing.JButton();
         jScrollPaneReports = new javax.swing.JScrollPane();
         tblSales = new javax.swing.JTable();
         lblTotalSales = new javax.swing.JLabel();
         txtTotalSales = new javax.swing.JTextField();
+        btnLogoutReport = new javax.swing.JButton();
+        lblFromDate = new javax.swing.JLabel();
+        txtFromDate = new javax.swing.JTextField();
+        btnDateRangeFilter = new javax.swing.JButton();
+        btnMaxSale = new javax.swing.JButton();
+        btnMinSale = new javax.swing.JButton();
+        btnAvgSale = new javax.swing.JButton();
+        txtMaxSalee = new javax.swing.JTextField();
+        txtMinSalee = new javax.swing.JTextField();
+        txtAvgSalee = new javax.swing.JTextField();
+        btnFinishReport = new javax.swing.JButton();
+        lblToDate = new javax.swing.JLabel();
+        txtToDate = new javax.swing.JTextField();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -132,47 +158,27 @@ public class UI extends javax.swing.JPanel {
 
         jLabel4.setText("First Name:");
         tabRegister.add(jLabel4);
-        jLabel4.setBounds(300, 50, 100, 30);
+        jLabel4.setBounds(250, 40, 100, 30);
         tabRegister.add(FristNameTEXT);
-        FristNameTEXT.setBounds(400, 50, 250, 30);
+        FristNameTEXT.setBounds(350, 40, 250, 30);
 
         jLabel5.setText("Last Name:");
         tabRegister.add(jLabel5);
-        jLabel5.setBounds(300, 100, 100, 30);
+        jLabel5.setBounds(250, 90, 100, 30);
         tabRegister.add(LastNameTEXT);
-        LastNameTEXT.setBounds(400, 100, 250, 30);
-
-        jLabel6.setText("Age:");
-        tabRegister.add(jLabel6);
-        jLabel6.setBounds(300, 150, 100, 30);
-        tabRegister.add(AgeTEXT);
-        AgeTEXT.setBounds(400, 150, 250, 30);
+        LastNameTEXT.setBounds(350, 90, 250, 30);
 
         jLabel7.setText("Phone:");
         tabRegister.add(jLabel7);
-        jLabel7.setBounds(300, 200, 100, 30);
+        jLabel7.setBounds(260, 280, 100, 30);
         tabRegister.add(PhoneTEXT);
-        PhoneTEXT.setBounds(400, 200, 250, 30);
+        PhoneTEXT.setBounds(350, 280, 250, 30);
 
         jLabel9.setText("Address:");
         tabRegister.add(jLabel9);
-        jLabel9.setBounds(300, 250, 100, 30);
+        jLabel9.setBounds(270, 330, 100, 30);
         tabRegister.add(AdderssTEXT);
-        AdderssTEXT.setBounds(400, 250, 250, 30);
-
-        jLabel8.setText("Gender:");
-        tabRegister.add(jLabel8);
-        jLabel8.setBounds(300, 300, 100, 30);
-
-        buttonGroup1.add(maleRadioButton);
-        maleRadioButton.setText("Male");
-        tabRegister.add(maleRadioButton);
-        maleRadioButton.setBounds(400, 300, 80, 30);
-
-        buttonGroup1.add(femaleRadioButton);
-        femaleRadioButton.setText("Female");
-        tabRegister.add(femaleRadioButton);
-        femaleRadioButton.setBounds(500, 300, 80, 30);
+        AdderssTEXT.setBounds(350, 330, 250, 30);
 
         Registeration.setText("Register");
         Registeration.addActionListener(new java.awt.event.ActionListener() {
@@ -181,7 +187,40 @@ public class UI extends javax.swing.JPanel {
             }
         });
         tabRegister.add(Registeration);
-        Registeration.setBounds(400, 360, 100, 35);
+        Registeration.setBounds(350, 390, 100, 35);
+
+        btnBackToLogin.setText("Back to Login");
+        btnBackToLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackToLoginActionPerformed(evt);
+            }
+        });
+        tabRegister.add(btnBackToLogin);
+        btnBackToLogin.setBounds(590, 390, 110, 23);
+
+        jLabel1.setText("Email:");
+        tabRegister.add(jLabel1);
+        jLabel1.setBounds(250, 150, 37, 16);
+
+        txtEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEmailActionPerformed(evt);
+            }
+        });
+        tabRegister.add(txtEmail);
+        txtEmail.setBounds(350, 140, 250, 30);
+
+        jLabel6.setText("Password:");
+        tabRegister.add(jLabel6);
+        jLabel6.setBounds(250, 200, 60, 20);
+        tabRegister.add(txtPassword);
+        txtPassword.setBounds(350, 190, 250, 30);
+
+        jLabel8.setText("Confirm Password:");
+        tabRegister.add(jLabel8);
+        jLabel8.setBounds(247, 240, 110, 20);
+        tabRegister.add(txtConfirmPassword);
+        txtConfirmPassword.setBounds(350, 240, 260, 30);
 
         jTabbedPane1.addTab("tab2", tabRegister);
 
@@ -264,6 +303,24 @@ public class UI extends javax.swing.JPanel {
         tabCustomer.add(jScrollPaneCustomers);
         jScrollPaneCustomers.setBounds(450, 40, 550, 400);
 
+        btnLogout.setText("Logout");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+        tabCustomer.add(btnLogout);
+        btnLogout.setBounds(930, 0, 72, 23);
+
+        btnFinish.setText("Finish");
+        btnFinish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFinishActionPerformed(evt);
+            }
+        });
+        tabCustomer.add(btnFinish);
+        btnFinish.setBounds(930, 470, 72, 23);
+
         jTabbedPane1.addTab("tab3", tabCustomer);
 
         tabProduct.setLayout(null);
@@ -339,6 +396,24 @@ public class UI extends javax.swing.JPanel {
         tabProduct.add(jScrollPaneProducts);
         jScrollPaneProducts.setBounds(450, 40, 550, 400);
 
+        btnLogoutProduct.setText("Logout");
+        btnLogoutProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutProductActionPerformed(evt);
+            }
+        });
+        tabProduct.add(btnLogoutProduct);
+        btnLogoutProduct.setBounds(930, 0, 72, 23);
+
+        btnFinishProduct.setText("Finish");
+        btnFinishProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFinishProductActionPerformed(evt);
+            }
+        });
+        tabProduct.add(btnFinishProduct);
+        btnFinishProduct.setBounds(930, 460, 72, 23);
+
         jTabbedPane1.addTab("tab4", tabProduct);
 
         tabReport.setLayout(null);
@@ -381,32 +456,35 @@ public class UI extends javax.swing.JPanel {
         tabReport.add(txtTotalSales);
         txtTotalSales.setBounds(200, 450, 200, 30);
 
-        
-        lblFilterDate = new javax.swing.JLabel();
-        txtFilterDate = new javax.swing.JTextField();
-        btnFilterDate = new javax.swing.JButton();
-        btnMaxSale = new javax.swing.JButton();
-        txtMaxSale = new javax.swing.JTextField();
-        btnMinSale = new javax.swing.JButton();
-        txtMinSale = new javax.swing.JTextField();
-        btnAvgSale = new javax.swing.JButton();
-        txtAvgSale = new javax.swing.JTextField();
-
-        lblFilterDate.setText("Date (YYYY-MM-DD):");
-        tabReport.add(lblFilterDate);
-        lblFilterDate.setBounds(300, 30, 150, 30);
-
-        tabReport.add(txtFilterDate);
-        txtFilterDate.setBounds(450, 30, 150, 30);
-
-        btnFilterDate.setText("Filter");
-        btnFilterDate.addActionListener(new java.awt.event.ActionListener() {
+        btnLogoutReport.setText("Logout");
+        btnLogoutReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFilterDateActionPerformed(evt);
+                btnLogoutReportActionPerformed(evt);
             }
         });
-        tabReport.add(btnFilterDate);
-        btnFilterDate.setBounds(620, 30, 100, 35);
+        tabReport.add(btnLogoutReport);
+        btnLogoutReport.setBounds(930, 0, 72, 23);
+
+        lblFromDate.setText("From Date: (YYYY-MM-DD):");
+        tabReport.add(lblFromDate);
+        lblFromDate.setBounds(220, 40, 160, 20);
+
+        txtFromDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFromDateActionPerformed(evt);
+            }
+        });
+        tabReport.add(txtFromDate);
+        txtFromDate.setBounds(370, 40, 110, 20);
+
+        btnDateRangeFilter.setText("Filter");
+        btnDateRangeFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDateRangeFilterActionPerformed(evt);
+            }
+        });
+        tabReport.add(btnDateRangeFilter);
+        btnDateRangeFilter.setBounds(670, 40, 72, 23);
 
         btnMaxSale.setText("Max Sale");
         btnMaxSale.addActionListener(new java.awt.event.ActionListener() {
@@ -415,11 +493,7 @@ public class UI extends javax.swing.JPanel {
             }
         });
         tabReport.add(btnMaxSale);
-        btnMaxSale.setBounds(50, 500, 100, 35);
-
-        txtMaxSale.setEditable(false);
-        tabReport.add(txtMaxSale);
-        txtMaxSale.setBounds(160, 500, 150, 30);
+        btnMaxSale.setBounds(45, 500, 80, 23);
 
         btnMinSale.setText("Min Sale");
         btnMinSale.addActionListener(new java.awt.event.ActionListener() {
@@ -428,11 +502,7 @@ public class UI extends javax.swing.JPanel {
             }
         });
         tabReport.add(btnMinSale);
-        btnMinSale.setBounds(350, 500, 100, 35);
-
-        txtMinSale.setEditable(false);
-        tabReport.add(txtMinSale);
-        txtMinSale.setBounds(460, 500, 150, 30);
+        btnMinSale.setBounds(265, 500, 80, 23);
 
         btnAvgSale.setText("Avg Sale");
         btnAvgSale.addActionListener(new java.awt.event.ActionListener() {
@@ -441,11 +511,28 @@ public class UI extends javax.swing.JPanel {
             }
         });
         tabReport.add(btnAvgSale);
-        btnAvgSale.setBounds(650, 500, 100, 35);
+        btnAvgSale.setBounds(475, 500, 90, 23);
+        tabReport.add(txtMaxSalee);
+        txtMaxSalee.setBounds(140, 500, 64, 22);
+        tabReport.add(txtMinSalee);
+        txtMinSalee.setBounds(360, 500, 64, 22);
+        tabReport.add(txtAvgSalee);
+        txtAvgSalee.setBounds(580, 500, 71, 22);
 
-        txtAvgSale.setEditable(false);
-        tabReport.add(txtAvgSale);
-        txtAvgSale.setBounds(760, 500, 150, 30);
+        btnFinishReport.setText("Finish");
+        btnFinishReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFinishReportActionPerformed(evt);
+            }
+        });
+        tabReport.add(btnFinishReport);
+        btnFinishReport.setBounds(930, 520, 72, 23);
+
+        lblToDate.setText("To Date:");
+        tabReport.add(lblToDate);
+        lblToDate.setBounds(490, 40, 50, 16);
+        tabReport.add(txtToDate);
+        txtToDate.setBounds(540, 40, 100, 22);
 
         jTabbedPane1.addTab("tab5", tabReport);
 
@@ -453,49 +540,209 @@ public class UI extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LogInBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogInBtnActionPerformed
-        String userName = UserNameTEXT.getText();
-        String Password = new String(PasswordTEXT.getPassword());
-        JOptionPane.showMessageDialog(this, "Logged in as " + userName);
+//        String userName = UserNameTEXT.getText();
+//        String Password = new String(PasswordTEXT.getPassword());
+//        JOptionPane.showMessageDialog(this, "Logged in as " + userName);
+                                                  
+             String userName = UserNameTEXT.getText();
+    String password = new String(PasswordTEXT.getPassword());
+
+    // Check if fields are empty
+    if (userName.trim().isEmpty() || password.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter username and password", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Call DAO to check login
+    UserDAO userDAO = new UserDAO();
+    User loggedInUser = userDAO.login(userName, password);
+
+    if (loggedInUser != null) {
+        // Store logged in user in session
+        UserSession.getInstance().setLoggedInUser(loggedInUser);
+        
+        JOptionPane.showMessageDialog(this, "Welcome " + loggedInUser.getFullname() + "!\nRole: " + loggedInUser.getRole());
+        
+        // Clear login fields
+        UserNameTEXT.setText("");
+        PasswordTEXT.setText("");
+        
+        // Apply access control to tabs (disable/enable based on role)
+        applyAccessControl();
+        
+        // Switch to Report tab after login
+        jTabbedPane1.setSelectedIndex(4);
+        
+    } else {
+        JOptionPane.showMessageDialog(this, "Invalid username or password", "Login Failed", JOptionPane.ERROR_MESSAGE);
+        UserNameTEXT.setText("");
+        PasswordTEXT.setText("");
+        UserNameTEXT.requestFocus();
+    }
+        
     }//GEN-LAST:event_LogInBtnActionPerformed
 
     private void RegisterationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterationActionPerformed
-        JOptionPane.showMessageDialog(this, "Registered user: " + FristNameTEXT.getText());
+//        JOptionPane.showMessageDialog(this, "Registered user: " + FristNameTEXT.getText());
+    // Get data from fields
+                              
+    String firstName = FristNameTEXT.getText().trim();
+    String lastName = LastNameTEXT.getText().trim();
+    String email = txtEmail.getText().trim();
+    String password = new String(txtPassword.getPassword()).trim();      // 👈 جديد
+    String confirmPassword = new String(txtConfirmPassword.getPassword()).trim(); // 👈 جديد
+    String phone = PhoneTEXT.getText().trim();
+    String address = AdderssTEXT.getText().trim();
+    
+    // Check if any field is empty
+    if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || 
+        password.isEmpty() || confirmPassword.isEmpty() || phone.isEmpty() || address.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please fill all fields", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    // Check if password matches confirm password
+    if (!password.equals(confirmPassword)) {
+        JOptionPane.showMessageDialog(this, "Password and Confirm Password do not match!", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    // Check password length (at least 4 characters)
+    if (password.length() < 4) {
+        JOptionPane.showMessageDialog(this, "Password must be at least 4 characters", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    // Check if email is valid
+    if (!email.contains("@")) {
+        JOptionPane.showMessageDialog(this, "Please enter valid email address", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    // Create username from first name + last name
+    String username = (firstName + lastName).toLowerCase();
+    
+    // Full name
+    String fullName = firstName + " " + lastName;
+    
+    // Create User object
+    User newUser = new User();
+    newUser.setUsername(username);
+    newUser.setPassword(password);  // 👈 الباسورد من الحقل
+    newUser.setFullname(fullName);
+    newUser.setRole("user");
+    newUser.setEmail(email);
+    newUser.setAddress(address);
+    
+    // Check if username already exists
+    UserDAO userDAO = new UserDAO();
+    if (userDAO.usernameExists(username)) {
+        JOptionPane.showMessageDialog(this, "Username already exists! Try different name.\nUsername would be: " + username, "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    // Check if email already exists
+    if (userDAO.emailExists(email)) {
+        JOptionPane.showMessageDialog(this, "Email already registered! Please use another email.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    // Register the user
+    if (userDAO.register(newUser)) {
+        JOptionPane.showMessageDialog(this, "Registration successful!\n\nYour Username: " + username + "\nYour Password: " + password, "Success", JOptionPane.INFORMATION_MESSAGE);
+        
+        // Clear fields
+        FristNameTEXT.setText("");
+        LastNameTEXT.setText("");
+        txtEmail.setText("");
+        txtPassword.setText("");
+        txtConfirmPassword.setText("");
+        PhoneTEXT.setText("");
+        AdderssTEXT.setText("");
+        
+        // Switch to Login tab
+        jTabbedPane1.setSelectedIndex(0);
+    } else {
+        JOptionPane.showMessageDialog(this, "Registration failed! Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+        
     }//GEN-LAST:event_RegisterationActionPerformed
 
     // Customer Actions
     private void btnCustAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustAddActionPerformed
-        Customer c = new Customer(txtCustName.getText(), txtCustPhone.getText(), txtCustEmail.getText(), txtCustAddress.getText());
-        if (customerDAO.addCustomer(c)) {
-            JOptionPane.showMessageDialog(this, "Customer added");
-            loadCustomers();
-            selectedCustomerId = -1;
+          try {
+        String name = txtCustName.getText().trim();
+        String phone = txtCustPhone.getText().trim();
+        String email = txtCustEmail.getText().trim();
+        String address = txtCustAddress.getText().trim();
+        
+        if (name.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter customer name");
+            return;
         }
+        
+        Customer c = new Customer(name, phone, email, address);
+        if (customerDAO.addCustomer(c)) {
+            JOptionPane.showMessageDialog(this, "Customer added successfully");
+            loadCustomers();
+            clearCustomerFields();
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error adding customer: " + e.getMessage());
+    }
     }//GEN-LAST:event_btnCustAddActionPerformed
 
     private void btnCustUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustUpdateActionPerformed
-        try {
-            int id = selectedCustomerId;
-            if (id == -1) { JOptionPane.showMessageDialog(this, "Please select a customer from the table first."); return; }
-            Customer c = new Customer(txtCustName.getText(), txtCustPhone.getText(), txtCustEmail.getText(), txtCustAddress.getText());
-            c.setCustomerId(id);
-            if (customerDAO.updateCustomer(c)) {
-                JOptionPane.showMessageDialog(this, "Customer updated");
-                loadCustomers();
+         try {
+        if (selectedCustomerId == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a customer from the table first");
+            return;
+        }
+        
+        String name = txtCustName.getText().trim();
+        String phone = txtCustPhone.getText().trim();
+        String email = txtCustEmail.getText().trim();
+        String address = txtCustAddress.getText().trim();
+        
+        if (name.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter customer name");
+            return;
+        }
+        
+        Customer c = new Customer(name, phone, email, address);
+        c.setCustomerId(selectedCustomerId);
+        
+        if (customerDAO.updateCustomer(c)) {
+            JOptionPane.showMessageDialog(this, "Customer updated successfully");
+            loadCustomers();
+            clearCustomerFields();
             selectedCustomerId = -1;
         }
-        } catch (Exception e) {}
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error updating customer: " + e.getMessage());
+    }
     }//GEN-LAST:event_btnCustUpdateActionPerformed
 
     private void btnCustDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustDeleteActionPerformed
         try {
-            int id = selectedCustomerId;
-            if (id == -1) { JOptionPane.showMessageDialog(this, "Please select a customer from the table first."); return; }
-            if (customerDAO.deleteCustomer(id)) {
-                JOptionPane.showMessageDialog(this, "Customer deleted");
-                loadCustomers();
-            selectedCustomerId = -1;
+        if (selectedCustomerId == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a customer from the table first");
+            return;
         }
-        } catch (Exception e) {}
+        
+        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this customer?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            if (customerDAO.deleteCustomer(selectedCustomerId)) {
+                JOptionPane.showMessageDialog(this, "Customer deleted successfully");
+                loadCustomers();
+                clearCustomerFields();
+                selectedCustomerId = -1;
+            }
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error deleting customer: " + e.getMessage());
+    }
     }//GEN-LAST:event_btnCustDeleteActionPerformed
 
     private void tblCustomersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustomersMouseClicked
@@ -559,11 +806,150 @@ public class UI extends javax.swing.JPanel {
 
     // Report Actions
     private void btnReportRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportRefreshActionPerformed
-        loadSales();
-        txtMaxSale.setText("");
-        txtMinSale.setText("");
-        txtAvgSale.setText("");
+         loadSales();
+    txtFromDate.setText("");
+    txtMaxSalee.setText("");
+    txtMinSalee.setText("");
+    txtAvgSalee.setText("");
     }//GEN-LAST:event_btnReportRefreshActionPerformed
+
+    private void btnBackToLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackToLoginActionPerformed
+        // TODO add your handling code here:
+         jTabbedPane1.setSelectedIndex(0);
+    }//GEN-LAST:event_btnBackToLoginActionPerformed
+
+    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEmailActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        // TODO add your handling code here:
+        UserSession.getInstance().logout();
+    applyAccessControl();
+    jTabbedPane1.setSelectedIndex(0); // Switch to Login tab
+    JOptionPane.showMessageDialog(this, "Logged out successfully");
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnFinishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinishActionPerformed
+        // TODO add your handling code here:
+          int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to exit?", "Exit", JOptionPane.YES_NO_OPTION);
+    if (confirm == JOptionPane.YES_OPTION) {
+        System.exit(0);
+    }
+    }//GEN-LAST:event_btnFinishActionPerformed
+
+    private void btnLogoutProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutProductActionPerformed
+        // TODO add your handling code here:
+        UserSession.getInstance().logout();
+    applyAccessControl();
+    jTabbedPane1.setSelectedIndex(0);
+    JOptionPane.showMessageDialog(this, "Logged out successfully");
+    }//GEN-LAST:event_btnLogoutProductActionPerformed
+
+    private void btnFinishProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinishProductActionPerformed
+        // TODO add your handling code here:
+        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to exit?", "Exit", JOptionPane.YES_NO_OPTION);
+    if (confirm == JOptionPane.YES_OPTION) {
+        System.exit(0);
+    }
+    }//GEN-LAST:event_btnFinishProductActionPerformed
+
+    private void txtFromDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFromDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFromDateActionPerformed
+
+    private void btnDateRangeFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDateRangeFilterActionPerformed
+        // TODO add your handling code here:
+        String fromDate = txtFromDate.getText().trim();
+    String toDate = txtToDate.getText().trim();
+    
+    if (fromDate.isEmpty() && toDate.isEmpty()) {
+        loadSales();
+        return;
+    }
+    
+    if (fromDate.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter From Date", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    if (toDate.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter To Date", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    // Load filtered sales by date range (without strict format check)
+    DefaultTableModel model = (DefaultTableModel) tblSales.getModel();
+    model.setRowCount(0);
+    double total = 0;
+    
+    for (Sale s : saleDAO.getSalesByDateRange(fromDate, toDate)) {
+        model.addRow(new Object[]{s.getSaleId(), s.getCustomerName(), s.getSaleDate(), s.getTotalAmount()});
+        total += s.getTotalAmount();
+    }
+    txtTotalSales.setText(String.format("%.2f", total));
+    
+    txtMaxSalee.setText("");
+    txtMinSalee.setText("");
+    txtAvgSalee.setText("");
+    }//GEN-LAST:event_btnDateRangeFilterActionPerformed
+
+    private void btnMaxSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaxSaleActionPerformed
+        // TODO add your handling code here:
+         if (tblSales.getRowCount() == 0) {
+        txtMaxSalee.setText("0");
+        return;
+    }
+    double max = 0;
+    for (int i = 0; i < tblSales.getRowCount(); i++) {
+        double val = Double.parseDouble(tblSales.getValueAt(i, 3).toString());
+        if (val > max) max = val;
+    }
+    txtMaxSalee.setText(String.format("%.2f", max));
+    }//GEN-LAST:event_btnMaxSaleActionPerformed
+
+    private void btnMinSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinSaleActionPerformed
+        // TODO add your handling code here:
+         if (tblSales.getRowCount() == 0) {
+        txtMinSalee.setText("0");
+        return;
+    }
+    double min = Double.MAX_VALUE;
+    for (int i = 0; i < tblSales.getRowCount(); i++) {
+        double val = Double.parseDouble(tblSales.getValueAt(i, 3).toString());
+        if (val < min) min = val;
+    }
+    txtMinSalee.setText(String.format("%.2f", min));
+    }//GEN-LAST:event_btnMinSaleActionPerformed
+
+    private void btnAvgSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAvgSaleActionPerformed
+        // TODO add your handling code here:
+          if (tblSales.getRowCount() == 0) {
+        txtAvgSalee.setText("0");
+        return;
+    }
+    double sum = 0;
+    for (int i = 0; i < tblSales.getRowCount(); i++) {
+        sum += Double.parseDouble(tblSales.getValueAt(i, 3).toString());
+    }
+    double avg = sum / tblSales.getRowCount();
+    txtAvgSalee.setText(String.format("%.2f", avg));
+    }//GEN-LAST:event_btnAvgSaleActionPerformed
+
+    private void btnLogoutReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutReportActionPerformed
+        // TODO add your handling code here:
+        UserSession.getInstance().logout();
+    applyAccessControl();
+    jTabbedPane1.setSelectedIndex(0);
+    JOptionPane.showMessageDialog(this, "Logged out successfully");
+    }//GEN-LAST:event_btnLogoutReportActionPerformed
+
+    private void btnFinishReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinishReportActionPerformed
+        // TODO add your handling code here:
+         int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to exit the application?", "Exit", JOptionPane.YES_NO_OPTION);
+    if (confirm == JOptionPane.YES_OPTION) {
+        System.exit(0);
+    }
+    }//GEN-LAST:event_btnFinishReportActionPerformed
 
     // Data Loaders
     private void loadCustomers() {
@@ -594,60 +980,55 @@ public class UI extends javax.swing.JPanel {
     }
 
 
-    private void btnFilterDateActionPerformed(java.awt.event.ActionEvent evt) {
-        String dateStr = txtFilterDate.getText().trim();
-        if (dateStr.isEmpty()) {
-            loadSales(); // load all if empty
-            return;
-        }
-        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblSales.getModel();
-        model.setRowCount(0);
-        double total = 0;
-        for (models.Sale s : saleDAO.getSalesByDate(dateStr)) {
-            model.addRow(new Object[]{s.getSaleId(), s.getCustomerName(), s.getSaleDate(), s.getTotalAmount()});
-            total += s.getTotalAmount();
-        }
-        txtTotalSales.setText(String.format("%.2f", total));
-        
-        // Reset min/max/avg fields
-        txtMaxSale.setText("");
-        txtMinSale.setText("");
-        txtAvgSale.setText("");
-    }
+    
+    
+    
+    private void applyAccessControl() {
+    boolean isLoggedIn = UserSession.getInstance().isLoggedIn();
+    boolean isAdmin = UserSession.getInstance().isAdmin();
+    
+    // Tab 0 (Login) - only if NOT logged in
+    jTabbedPane1.setEnabledAt(0, !isLoggedIn);
+    
+    // Tab 1 (Register) - only if NOT logged in
+    jTabbedPane1.setEnabledAt(1, !isLoggedIn);
+    
+    // Tab 2 (Customer) - only admin
+    jTabbedPane1.setEnabledAt(2, isLoggedIn && isAdmin);
+    
+    // Tab 3 (Product) - only admin
+    jTabbedPane1.setEnabledAt(3, isLoggedIn && isAdmin);
+    
+    // Tab 4 (Report) - any logged in user
+    jTabbedPane1.setEnabledAt(4, isLoggedIn);
+}
+    private void clearProductFields() {
+    txtProdName.setText("");
+    txtProdPrice.setText("");
+    txtProdQty.setText("");
+}
 
-    private void btnMaxSaleActionPerformed(java.awt.event.ActionEvent evt) {
-        if (tblSales.getRowCount() == 0) { txtMaxSale.setText("0"); return; }
-        double max = 0;
-        for (int i=0; i<tblSales.getRowCount(); i++) {
-            double val = Double.parseDouble(tblSales.getValueAt(i, 3).toString());
-            if (val > max) max = val;
-        }
-        txtMaxSale.setText(String.format("%.2f", max));
-    }
+private void clearCustomerFields() {
+    txtCustName.setText("");
+    txtCustPhone.setText("");
+    txtCustEmail.setText("");
+    txtCustAddress.setText("");
+}
+//private boolean isValidDate(String date) {
+//    // Allows format: YYYY-M-D or YYYY-MM-DD
+//    return date.matches("\\d{4}-\\d{1,2}-\\d{1,2}");
+//}
 
-    private void btnMinSaleActionPerformed(java.awt.event.ActionEvent evt) {
-        if (tblSales.getRowCount() == 0) { txtMinSale.setText("0"); return; }
-        double min = Double.MAX_VALUE;
-        for (int i=0; i<tblSales.getRowCount(); i++) {
-            double val = Double.parseDouble(tblSales.getValueAt(i, 3).toString());
-            if (val < min) min = val;
-        }
-        txtMinSale.setText(String.format("%.2f", min));
-    }
 
-    private void btnAvgSaleActionPerformed(java.awt.event.ActionEvent evt) {
-        if (tblSales.getRowCount() == 0) { txtAvgSale.setText("0"); return; }
-        double sum = 0;
-        for (int i=0; i<tblSales.getRowCount(); i++) {
-            sum += Double.parseDouble(tblSales.getValueAt(i, 3).toString());
-        }
-        double avg = sum / tblSales.getRowCount();
-        txtAvgSale.setText(String.format("%.2f", avg));
-    }
 
+
+//    private javax.swing.JTextField txtEmail;
+private javax.swing.JTextField txtFilterDate;
+private javax.swing.JTextField txtMinSale;
+private javax.swing.JTextField txtAvgSale;
+private javax.swing.JTextField txtMaxSale;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField AdderssTEXT;
-    private javax.swing.JTextField AgeTEXT;
     private javax.swing.JTextField FristNameTEXT;
     private javax.swing.JTextField LastNameTEXT;
     private javax.swing.JButton LogInBtn;
@@ -655,15 +1036,26 @@ public class UI extends javax.swing.JPanel {
     private javax.swing.JTextField PhoneTEXT;
     private javax.swing.JButton Registeration;
     private javax.swing.JTextField UserNameTEXT;
+    private javax.swing.JButton btnAvgSale;
+    private javax.swing.JButton btnBackToLogin;
     private javax.swing.JButton btnCustAdd;
     private javax.swing.JButton btnCustDelete;
     private javax.swing.JButton btnCustUpdate;
+    private javax.swing.JButton btnDateRangeFilter;
+    private javax.swing.JButton btnFinish;
+    private javax.swing.JButton btnFinishProduct;
+    private javax.swing.JButton btnFinishReport;
+    private javax.swing.JButton btnLogout;
+    private javax.swing.JButton btnLogoutProduct;
+    private javax.swing.JButton btnLogoutReport;
+    private javax.swing.JButton btnMaxSale;
+    private javax.swing.JButton btnMinSale;
     private javax.swing.JButton btnProdAdd;
     private javax.swing.JButton btnProdDelete;
     private javax.swing.JButton btnProdUpdate;
     private javax.swing.JButton btnReportRefresh;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JRadioButton femaleRadioButton;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -675,27 +1067,17 @@ public class UI extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPaneCustomers;
     private javax.swing.JScrollPane jScrollPaneProducts;
     private javax.swing.JScrollPane jScrollPaneReports;
-    
-    private javax.swing.JLabel lblFilterDate;
-    private javax.swing.JTextField txtFilterDate;
-    private javax.swing.JButton btnFilterDate;
-    private javax.swing.JButton btnMaxSale;
-    private javax.swing.JTextField txtMaxSale;
-    private javax.swing.JButton btnMinSale;
-    private javax.swing.JTextField txtMinSale;
-    private javax.swing.JButton btnAvgSale;
-    private javax.swing.JTextField txtAvgSale;
-
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblCustAddress;
     private javax.swing.JLabel lblCustEmail;
     private javax.swing.JLabel lblCustName;
     private javax.swing.JLabel lblCustPhone;
+    private javax.swing.JLabel lblFromDate;
     private javax.swing.JLabel lblProdName;
     private javax.swing.JLabel lblProdPrice;
     private javax.swing.JLabel lblProdQty;
+    private javax.swing.JLabel lblToDate;
     private javax.swing.JLabel lblTotalSales;
-    private javax.swing.JRadioButton maleRadioButton;
     private javax.swing.JPanel tabCustomer;
     private javax.swing.JPanel tabLogin;
     private javax.swing.JPanel tabProduct;
@@ -704,13 +1086,21 @@ public class UI extends javax.swing.JPanel {
     private javax.swing.JTable tblCustomers;
     private javax.swing.JTable tblProducts;
     private javax.swing.JTable tblSales;
+    private javax.swing.JTextField txtAvgSalee;
+    private javax.swing.JPasswordField txtConfirmPassword;
     private javax.swing.JTextField txtCustAddress;
     private javax.swing.JTextField txtCustEmail;
     private javax.swing.JTextField txtCustName;
     private javax.swing.JTextField txtCustPhone;
+    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtFromDate;
+    private javax.swing.JTextField txtMaxSalee;
+    private javax.swing.JTextField txtMinSalee;
+    private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtProdName;
     private javax.swing.JTextField txtProdPrice;
     private javax.swing.JTextField txtProdQty;
+    private javax.swing.JTextField txtToDate;
     private javax.swing.JTextField txtTotalSales;
     // End of variables declaration//GEN-END:variables
 }
